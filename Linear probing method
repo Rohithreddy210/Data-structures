@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define TABLE_SIZE 10
+
+int hash_table[TABLE_SIZE];
+
+int hash_function(int key) {
+    return key % TABLE_SIZE;
+}
+
+bool insert(int key) {
+    int index = hash_function(key);
+    while (hash_table[index] != 0) {
+        index = (index + 1) % TABLE_SIZE;
+        if (index == hash_function(key)) {
+            return false;
+        }
+    }
+    hash_table[index] = key;
+    return true;
+}
+
+int main() {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        hash_table[i] = 0;
+    }
+
+    int keys[] = {15, 11, 27, 8, 12};
+    int n = sizeof(keys) / sizeof(keys[0]);
+
+    for (int i = 0; i < n; i++) {
+        if (!insert(keys[i])) {
+            printf("Error: Could not insert key %d into the hash table.\n", keys[i]);
+        }
+    }
+
+    printf("Hash table:\n");
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        printf("%d ", hash_table[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+OUTPUT
+
+Hash table:
+0 11 12 0 0 15 0 27 8 0
